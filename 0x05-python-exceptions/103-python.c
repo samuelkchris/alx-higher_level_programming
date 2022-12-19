@@ -1,69 +1,44 @@
-#include <Python.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <Python.h>
 
-/**
- * print_python_list - prints information about a Python list object
- * @p: pointer to a Python object
- */
-void print_python_list(PyObject *p)
-{
-    Py_ssize_t size, i;
-    PyObject *item;
-
-    if (!p || !PyList_Check(p))
-    {
-        printf("Error: Invalid list object\n");
+void print_python_list(PyObject *p) {
+    if (!PyList_Check(p)) {
+        printf("Error: Invalid PyListObject\n");
         return;
     }
-
-    size = PyList_Size(p);
+    Py_ssize_t size = PyList_Size(p);
     printf("[*] Python list info\n");
     printf("[*] Size of the Python List = %ld\n", size);
     printf("[*] Allocated = %ld\n", ((PyListObject *)p)->allocated);
-    for (i = 0; i < size; i++)
-    {
-        item = PyList_GetItem(p, i);
+    for (Py_ssize_t i = 0; i < size; i++) {
+        PyObject *item = PyList_GetItem(p, i);
         printf("Element %ld: %s\n", i, Py_TYPE(item)->tp_name);
     }
 }
 
-/**
- * print_python_bytes - prints information about a Python bytes object
- * @p: pointer to a Python object
- */
-void print_python_bytes(PyObject *p)
-{
-    Py_ssize_t size, i;
-    char *data;
-
-    if (!p || !PyBytes_Check(p))
-    {
-        printf("Error: Invalid bytes object\n");
+void print_python_bytes(PyObject *p) {
+    if (!PyBytes_Check(p)) {
+        printf("Error: Invalid PyBytesObject\n");
         return;
     }
-
-    size = PyBytes_Size(p);
-    data = PyBytes_AsString(p);
-    printf("[.] bytes object info\n");
+    Py_ssize_t size = PyBytes_Size(p);
+    printf("[.] Python bytes info\n");
     printf("  size: %ld\n", size);
-    printf("  trying string: %s\n", data);
-    printf("  first 10 bytes: ");
-    for (i = 0; i < 10 && i < size; i++)
-        printf("%02hhx%c", data[i], i + 1 < 10 ? ' ' : '\n');
+    printf("  trying string: %s\n", PyBytes_AsString(p));
+    printf("  first %ld bytes: ", size < 10 ? size : 10);
+    for (Py_ssize_t i = 0; i < (size < 10 ? size : 10); i++) {
+        printf("%02x ", (unsigned char) PyBytes_AsString(p)[i]);
+    }
+    printf("\n");
 }
 
-/**
- * print_python_float - prints information about a Python float object
- * @p: pointer to a Python object
- */
-void print_python_float(PyObject *p)
-{
-    if (!p || !PyFloat_Check(p))
-    {
-        printf("Error: Invalid float object\n");
+void print_python_float(PyObject *p) {
+    if (!PyFloat_Check(p)) {
+        printf("Error: Invalid PyFloatObject\n");
         return;
     }
-
-    printf("[.] float object info\n");
-    printf("  value: %f\n", PyFloat_AsDouble(p));
+    printf("[.] Python float info\n");
+    double value = PyFloat_AS_DOUBLE(p);
+    printf("  value: %.16g\n", value);
 }
