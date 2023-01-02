@@ -1,44 +1,50 @@
 #!/usr/bin/python3
+'''Module for N Queens problem.'''
 
-import sys
 
-def nqueens(n):
-    def is_valid(queens, row, col):
-        for q in queens:
-            if q[1] == col or q[0] - q[1] == row - col or q[0] + q[1] == row + col:
-                return False
-        return True
+def isSafe(board, row, col):
+    '''Checks if position is safe from attack.
+    Args:
+        board: The board state.
+        row: The row to check.
+        col: The colum to check.
+    '''
+    for c in range(col):
+        if board[c] is row or abs(board[c] - row) is abs(c - col):
+            return False
+    return True
 
-    def solve(queens, row):
-        if row == n:
-            return queens
-        for col in range(n):
-            if is_valid(queens, row, col):
-                queens.append((row, col))
-                solution = solve(queens, row + 1)
-                if solution is not None:
-                    return solution
-                queens.pop()
-        return None
 
-    queens = solve([], 0)
-    if queens is None:
-        return []
-    return queens
+def checkBoard(board, col):
+    '''Checks the board state column by column using backtracking.
+    Args:
+        board: The board state.
+        col: The current colum to check.
+    '''
+    n = len(board)
+    if col is n:
+        print(str([[c, board[c]] for c in range(n)]))
+        return
 
-if len(sys.argv) != 2:
-    print("Usage: nqueens N")
-    sys.exit(1)
+    for row in range(n):
+        if isSafe(board, row, col):
+            board[col] = row
+            checkBoard(board, col + 1)
 
-try:
-    n = int(sys.argv[1])
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+    n = 0
+    try:
+        n = int(sys.argv[1])
+    except:
+        print("N must be a number")
+        sys.exit(1)
     if n < 4:
         print("N must be at least 4")
         sys.exit(1)
-except ValueError:
-    print("N must be a number")
-    sys.exit(1)
-
-solutions = nqueens(n)
-for solution in solutions:
-    print(solution)
+    board = [0 for col in range(n)]
+    checkBoard(board, 0)
