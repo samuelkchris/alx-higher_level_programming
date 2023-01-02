@@ -22,7 +22,7 @@ def nqueens(n):
     queens = solve([], 0)
     if queens is None:
         return []
-    return [['.' * c + 'Q' + '.' * (n - c - 1) for r, c in queens] for queens in queens]
+    return queens
 
 if len(sys.argv) != 2:
     print("Usage: nqueens N")
@@ -39,4 +39,4 @@ except ValueError:
 
 solutions = nqueens(n)
 for solution in solutions:
-    print("\n".join(solution))
+    print(solution)
