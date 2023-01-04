@@ -1,5 +1,5 @@
 ============================
-How to Use 100-matrix_mul.py
+How  to Use 100-matrix_mul.py
 ============================
 
 This module defines a matrix multiplication function ``matrix_mul(m_a, m_b)``.
