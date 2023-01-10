@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # read_write_heap.py
-# Brennan D Baraban <375@holbertonschool.com>
 """Find and replace a string in the heap of a running process.
 
 Usage: `read_write_heap.py pid search_string replace_string`
